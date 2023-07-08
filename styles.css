@@ -1,0 +1,141 @@
+@charset "utf-8";
+.container-fluid {
+    background-image: url(images/augustine-wong-li0iC0rjvvg-unsplash.jpg);
+   
+}
+.container .navbar.navbar-expand-lg.navbar-light.bg-light .navbar-brand {
+    color: #450001;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-style: normal;
+    font-weight: bolder;
+    font-size: xx-large;
+}
+.container .navbar.navbar-expand-lg.navbar-light.bg-light #navbarSupportedContent1 {
+    width: 70px;
+    height: 80px;
+    display: inline;
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+    color: #320303;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-weight: 900;
+    font-size: large;
+    text-shadow: 0px 0px #220001;
+
+
+}
+.container-fluid .container .text-center {
+    color: black;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-style: normal;
+    font-variant: normal;
+
+}
+.container .row .col-xl-9 {
+    color: #FFFFFF;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-size: small;
+    text-align: center;
+}
+.container .row .col-xl-12 {
+    color: #FFFFFF;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    text-align: center;
+    font-size: x-small;
+}
+.card.col-md-4.col-xl-12 .card-body .card-title.text-center {
+    color: #3D0304;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+}
+.card.col-md-4.col-xl-12 .card-body .btn.btn-primary {
+    color: #FFFFFF;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    background-color: #153605;
+}
+.navbar.navbar-expand-lg.navbar-light.bg-light .navbar-brand img {
+    width: 90px;
+    height: 90px;
+}
+.container .row .footer {
+    color: black;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-size: x-small;
+    text-decoration: overline;
+	text-align: right;
+}
+
+.btn.btn-primary {
+	color: #FFFFFF;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    background-color: #153605;
+}
+
+.nav-link a:hover {color: cadetblue}
+
+.profile {
+    
+        font-family : Arial, Helvetica, sans-serif;
+        font-size : 100%;
+      font-weight: bold;
+      background-image: url(images/augustine-wong-li0iC0rjvvg-unsplash.jpg);
+      background-size: cover;
+      width: 100vw;
+    height: 100vh;
+     
+     
+       color: #ea503f;
+       font-family: Arial;
+       text-align: center;
+     
+}
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:fixed; 
+    right:550px; 
+    top:100px;
+    width: fit-content;
+    background-color: #8ca0ff;
+    padding: 25px;
+    margin-bottom: 1em;
+}
+
+.boxes {
+   
+   
+}
+
+.col-xl-13 {
+    text-align: center;
+    position: absolute;
+        bottom: 0;
+        width: 100%;
+}
+
+.butcenter {
+    text-align: center;
+    margin-bottom: 2em;
+    position: relative;
+        bottom: 0;
+        left:20;
+        padding-top: 20px;
+       /*width: 960px;
+        /*height:100px*/
+}
+.butcenter1 {
+    padding-bottom: 5px;
+}
+
+.buttons {
+    width: 200px;
+    margin: 0 auto;
+    display: inline;
+}
+    
+        .action_btn {
+    width: 200px;
+    margin: 0 auto;
+    display: inline;
+    }
