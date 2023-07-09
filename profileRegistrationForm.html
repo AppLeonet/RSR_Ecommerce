@@ -1,37 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
-    <meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RSR - Registration Form</title>
-    <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
-	<link href="styles.css" rel="stylesheet" type="text/css">
-	<link href="favicon_io/favicon.ico" rel="icon">
-    
-    
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RSR - Registration Form</title>
+  <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet" type="text/css">
+  <link href="favicon_io/favicon.ico" rel="icon">
+  <script type="text/javascript" src="https://npmcdn.com/parse/dist/parse.min.js"></script>
 </head>
 
-<body> 
-    
-    <div class="profile">
-    <h1> Profile Registration Form</h1>
+<body>
+
+  <div class="profile">
+    <h1>Profile Registration Form</h1>
     <div class="box">
-    <form><div class="boxes"><table> <tr> <td> Email Address: </td> <td> <input type=”mail” placeholder=”Email” name=””> </td> </tr> <tr> <td> Password: </td>
-         <td> <input type=”Password” placeholder=”Password” name=””> </td> </tr> <tr> <td> First Name: </td>
-            <td> <input type=”text” placeholder=”fname” name=””> </td> </tr><tr> <td> last Name: </td>
-                <td> <input type=”text” placeholder=”lname” name=””> </td> </tr>
-                 </table> </div>
-                 <div class="buttons">
-                 <div class="action_btn">
-                 <tr> <td><div class="butcenter"><button name="submit" class="action_btn submit" type="submit" value="Register"  onclick="myFunction()" > Register</button></div></td></tr> 
-                 <tr> <td><div class="butcenter1"><button name="submit" class="action_btn Sign in" type="submit" value="Sign in" onclick="myFunction2()"> Sign in</button></div></td></tr>
-   
-                </div>  
-            </div>           
-            </form>
-</div>
-<div class="col-xl-13">All rights reserved 2022. Copyright property of RSR</div></div>
-    </body>
+      <form>
+        <div class="boxes">
+          <table>
+            <tr>
+              <td>Email Address:</td>
+              <td><input id="email1" type="email" placeholder="Email" name=""></td>
+            </tr>
+            <tr>
+              <td>Password:</td>
+              <td><input id="password1" type="password" placeholder="Password" name=""></td>
+            </tr>
+            <tr>
+              <td>Username:</td>
+              <td><input id="username1" type="text" placeholder="fname" name=""></td>
+            </tr>
+            
+          </table>
+        </div>
+        <div class="buttons">
+          <div class="action_btn">
+            <tr>
+              <td>
+                <div class="butcenter">
+                  <button id="createButton" name="submit" class="action_btn submit" type="button" onclick="register()">Register</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="butcenter1">
+                  <button name="submit" class="action_btn Sign in" type="button" onclick="logIn()">Sign in</button>
+                </div>
+              </td>
+            </tr>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-xl-13">All rights reserved 2022. Copyright property of RSR</div>
+  </div>
+
+  <script>
+    // Initialize Parse
+    Parse.initialize("vTvoKmj1THgT8KVwWnKLQ1bLiAHZbc98xZj3V3zL", "1EtflPCMxsYzwARwzwnba08TFwOjRpCc5z24kBtl");
+    Parse.serverURL = "https://parseapi.back4app.com/";
+
+    function register() {
+      var username = document.getElementById("username1").value;
+      var email = document.getElementById("email1").value;
+      var password = document.getElementById("password1").value;
+
+      if (username.trim() === '' || email.trim() === '' || password.trim() === '') {
+        alert('Registration failed. Please fill in all fields.');
+      } else {
+        var Artista = Parse.Object.extend("Artista");
+        var myart = new Artista();
+        myart.set("username", username);
+        myart.set("email", email);
+        myart.set("password", password);
+
+        myart.save().then(function (art) {
+          alert('Registration successful!');
+          console.log('Artista created successfully with username: ' + art.get("username") + ', email: ' + art.get("email") + ', and password');
+          window.location.href = "profilePage.html"; // Redirect to profile page
+        }).catch(function (error) {
+          alert('Registration failed. Please try again.');
+          console.log('Error: ' + error.message);
+        });
+      }
+    }
+
+    function logIn() {
+      var username = document.getElementById("username1").value;
+      var password = document.getElementById("password1").value;
+
+      if (username.trim() === '' || password.trim() === '') {
+        alert('Sign in failed. Please enter your username and password.');
+      } else {
+        var query = new Parse.Query("Artista");
+        query.equalTo("username", username);
+        query.first().then(function (art) {
+          if (art && art.get("password") === password) {
+            console.log('User signed in successfully: ' + art.get("username"));
+            alert('Sign in successful!');
+            window.location.href = "profilePage.html"; // Redirect to profile page
+          } else {
+            alert('Sign in failed. Please check your username and password.');
+          }
+        }).catch(function (error) {
+          alert('Sign in failed. Please check your username and password.');
+          console.log('Error: ' + error.message);
+        });
+      }
+    }
+  </script>
+
 </body>
+
 </html>
