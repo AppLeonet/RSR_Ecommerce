@@ -9,6 +9,47 @@
 	<link href="css/bootstrap-4.4.1.css" rel="stylesheet">
 	<link href="styles.css" rel="stylesheet" type="text/css">
 	<link href="favicon_io/favicon.ico" rel="icon">
+  <style>
+  .dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {background-color: #f1f1f1}
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+  }
+</style>
   </head>
   <body>
   <div class="container-fluid">
@@ -22,6 +63,16 @@
             <li class="nav-item"> <a class="nav-link" href="shop.html">Shop</a></li>
             <li class="nav-item"> <a class="nav-link" href="commission.html">Commission</a></li>
             <li class="nav-item"> <a class="nav-link" href="contact.html">Contact</a></li>
+            
+            <div class="dropdown">
+              <a href="profileRegistrationForm.html">
+              <button class="dropbtn" id="welcomeMessage">Hello, </button> </a>
+              <div class="dropdown-content">
+              <a href="profilePage.html">Profile</a>
+              <a href="#">Link 2</a>
+              <a href="#">Link 3</a>
+              </div>
+            </div>
           </ul>
         </div>
 </nav>
@@ -96,8 +147,34 @@
   </div>
   	
 <!-- body code goes here -->
+<!-- Scripts and JavaScript code -->
+<script src="https://npmcdn.com/parse/dist/parse.min.js"></script>
+<script>
+  // Initialize Parse
+  Parse.initialize("vTvoKmj1THgT8KVwWnKLQ1bLiAHZbc98xZj3V3zL", "1EtflPCMxsYzwARwzwnba08TFwOjRpCc5z24kBtl");
+  Parse.serverURL = "https://parseapi.back4app.com/";
 
+  // Check if the user is authenticated and display the profile information
+  function checkAuthentication() {
+    var currentUser = Parse.User.current();
 
+    if (currentUser) {
+      console.log('User is authenticated: ' + currentUser.get("username"));
+
+      // Display the welcome message
+      document.getElementById("welcomeMessage").textContent = 'Hello, ' + currentUser.get("username") + '!';
+
+      // Display the email
+      document.getElementById("email").textContent = currentUser.get("email");
+    } else {
+      console.log('User is not authenticated');
+      window.location.href = "profileRegistrationForm.html";
+    }
+  }
+
+  // Call the checkAuthentication function after the page has finished loading
+  document.addEventListener('DOMContentLoaded', checkAuthentication);
+</script>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="js/jquery-3.4.1.min.js"></script>
 

@@ -1,6 +1,6 @@
+<!-- Update the profileRegistrationForm code -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,14 +40,14 @@
             <tr>
               <td>
                 <div class="butcenter">
-                  <button id="createButton" name="submit" class="action_btn submit" type="button" onclick="register()">Register</button>
+                  <button id="registerButton" name="submit" class="action_btn submit" type="button" onclick="register()">Register</button>
                 </div>
               </td>
             </tr>
             <tr>
               <td>
                 <div class="butcenter1">
-                  <button name="submit" class="action_btn Sign in" type="button" onclick="logIn()">Sign in</button>
+                  <button id="loginButton" name="submit" class="action_btn Sign in" type="button" onclick="logIn()">Sign in</button>
                 </div>
               </td>
             </tr>
@@ -71,17 +71,16 @@
       if (username.trim() === '' || email.trim() === '' || password.trim() === '') {
         alert('Registration failed. Please fill in all fields.');
       } else {
-        var Artista = Parse.Object.extend("Artista");
-        var myart = new Artista();
-        myart.set("username", username);
-        myart.set("email", email);
-        myart.set("password", password);
+        var user = new Parse.User();
+        user.set("username", username);
+        user.set("email", email);
+        user.set("password", password);
 
-        myart.save().then(function (art) {
+        user.signUp().then(function(user) {
           alert('Registration successful!');
-          console.log('Artista created successfully with username: ' + art.get("username") + ', email: ' + art.get("email") + ', and password');
-          window.location.href = "profilePage.html"; // Redirect to profile page
-        }).catch(function (error) {
+          console.log('User created successfully with username: ' + user.get("username") + ', email: ' + user.get("email") + ', and password');
+          window.location.href = "index.html";
+        }).catch(function(error) {
           alert('Registration failed. Please try again.');
           console.log('Error: ' + error.message);
         });
@@ -95,24 +94,16 @@
       if (username.trim() === '' || password.trim() === '') {
         alert('Sign in failed. Please enter your username and password.');
       } else {
-        var query = new Parse.Query("Artista");
-        query.equalTo("username", username);
-        query.first().then(function (art) {
-          if (art && art.get("password") === password) {
-            console.log('User signed in successfully: ' + art.get("username"));
-            alert('Sign in successful!');
-            window.location.href = "profilePage.html"; // Redirect to profile page
-          } else {
-            alert('Sign in failed. Please check your username and password.');
-          }
-        }).catch(function (error) {
+        Parse.User.logIn(username, password).then(function(user) {
+          console.log('User signed in successfully: ' + user.get("username"));
+          alert('Sign in successful!');
+          window.location.href = "index.html";
+        }).catch(function(error) {
           alert('Sign in failed. Please check your username and password.');
           console.log('Error: ' + error.message);
         });
       }
     }
   </script>
-
 </body>
-
 </html>

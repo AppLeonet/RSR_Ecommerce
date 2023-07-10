@@ -1,91 +1,44 @@
+<!-- Update the profilePage code -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RSR - Profile Page</title>
-    <!-- Bootstrap -->
-	<link href="css/bootstrap-4.4.1.css" rel="stylesheet">
-	<link href="styles.css" rel="stylesheet" type="text/css">
-	<link href="favicon_io/favicon.ico" rel="icon">
-  </head>
-  <body>
-  <div class="container-fluid">
-    <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light"> <a class="navbar-brand" href="index.html"><img src="RSR Logo.png" alt="RSR Logo" width="400" height="400" class="img-fluid rounded-circle"/></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active"> <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a></li>
-            <li class="nav-item"> <a class="nav-link" href="about.html">About</a></li>
-            <li class="nav-item"> <a class="nav-link" href="shop.html">Shop</a></li>
-            <li class="nav-item"> <a class="nav-link" href="commission.html">Commission</a></li>
-            <li class="nav-item"> <a class="nav-link" href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-</nav>
-      <div id="carouselExampleIndicators1" class="carousel slide" data-ride="carousel" style="background-color: grey">
-     
-     
-        <br>
-		<br>
-		<br>
-      <h1 class="text-center">Welcome to RSR.com&nbsp;</h1>
-<br>
-		<br>
-      <div class="row">
-        <div class="col-xl-4">
-          <div class="card col-md-4 col-xl-12"> <!--<img class="card-img-top img-fluid" src="images/Talking_Shit.jpg" alt="Card image cap">--> 
-            <div class="card-body">
-              <h5 class="card-title text-center">About</h5>
-              <p class="card-text text-center">&nbsp;</p>
-              <a href="about.html" class="btn btn-primary">Learn more&nbsp;</a> </div>
-          </div>
-          
-        </div>
-        <div class="col-xl-4">
-          <div class="card col-md-4 col-xl-12"><!-- <img class="card-img-top img-fluid" src="images/Sher_Of_Steinway_Street.jpg" alt="Card image cap"> -->
-            <div class="card-body">
-              <h5 class="card-title text-center">Shop</h5>
-              <p class="card-text text-center">&nbsp;</p>
-              <a href="shop.html" class="btn btn-primary">Learn more&nbsp; &nbsp;</a> </div>
-          </div>
-          
-        </div>
-        <div class="col-xl-4">
-          <div class="card col-md-4 col-xl-12"><!--<img class="card-img-top img-fluid" src="images/Carrom_Boreeeed.jpg" alt="Card image cap"> -->
-            <div class="card-body">
-              <h5 class="card-title text-center">Commission</h5>
-              <p class="card-text text-center">&nbsp;</p>
-              <a href="commission.html" class="btn btn-primary">Learn more&nbsp;</a> </div>
-          
-        </div>
-        </div>
-      </div>
-      
-      <br>
-	  <br>
+<head>
+  <!-- Head content -->
+</head>
+<body>
+  <!-- HTML body content -->
+  <!-- Add this element where you want to display the username -->
+  <h2 id="welcomeMessage"></h2>
 
-	  <footer>&nbsp;</footer>
-	  <div class="text-center">
-	    <div class="col-xl-12"> <!--<img src="RSR Logo.png" alt="Logo" class="rounded-circle img-fluid"></div> -->
-		  <br>
-		  <br>
-		  <br>
-	    <div class="footer">All rights reserved 2022. Copyright property of RSR</div>
-      </div>
-    </div>
-  </div>
-  	
-<!-- body code goes here -->
+  <!-- Add this element where you want to display the email -->
+  <h3>Email: <span id="email"></span></h3>
 
+  <!-- Scripts and JavaScript code -->
+  <script src="https://npmcdn.com/parse/dist/parse.min.js"></script>
+  <script>
+    // Initialize Parse
+    Parse.initialize("vTvoKmj1THgT8KVwWnKLQ1bLiAHZbc98xZj3V3zL", "1EtflPCMxsYzwARwzwnba08TFwOjRpCc5z24kBtl");
+    Parse.serverURL = "https://parseapi.back4app.com/";
 
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-	<script src="js/jquery-3.4.1.min.js"></script>
+    // Check if the user is authenticated and display the profile information
+    function checkAuthentication() {
+      var currentUser = Parse.User.current();
 
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="js/popper.min.js"></script> 
-  <script src="js/bootstrap-4.4.1.js"></script>
-  </body>
+      if (currentUser) {
+        console.log('User is authenticated: ' + currentUser.get("username"));
+
+        // Display the welcome message
+        document.getElementById("welcomeMessage").textContent = 'Welcome, ' + currentUser.get("username") + '!';
+
+        // Display the email
+        document.getElementById("email").textContent = currentUser.get("email");
+      } else {
+        console.log('User is not authenticated');
+        window.location.href = "profileRegistrationForm.html";
+      }
+    }
+
+    // Call the checkAuthentication function after the page has finished loading
+    document.addEventListener('DOMContentLoaded', checkAuthentication);
+  </script>
+</body>
 </html>
