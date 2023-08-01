@@ -59,51 +59,68 @@
   </div>
 
   <script>
-    // Initialize Parse
-    Parse.initialize("vTvoKmj1THgT8KVwWnKLQ1bLiAHZbc98xZj3V3zL", "1EtflPCMxsYzwARwzwnba08TFwOjRpCc5z24kBtl");
-    Parse.serverURL = "https://parseapi.back4app.com/";
+    
+  // Initialize Parse
+  Parse.initialize("vTvoKmj1THgT8KVwWnKLQ1bLiAHZbc98xZj3V3zL", "1EtflPCMxsYzwARwzwnba08TFwOjRpCc5z24kBtl");
+  Parse.serverURL = "https://parseapi.back4app.com/";
 
-    function register() {
-      var username = document.getElementById("username1").value;
-      var email = document.getElementById("email1").value;
-      var password = document.getElementById("password1").value;
+  function checkExistingUsername(username) {
+    var query = new Parse.Query(Parse.User);
+    query.equalTo("username", username);
+    return query.first();
+  }
 
-      if (username.trim() === '' || email.trim() === '' || password.trim() === '') {
-        alert('Registration failed. Please fill in all fields.');
-      } else {
-        var user = new Parse.User();
-        user.set("username", username);
-        user.set("email", email);
-        user.set("password", password);
+  async function register() {
+    var username = document.getElementById("username1").value;
+    var email = document.getElementById("email1").value;
+    var password = document.getElementById("password1").value;
 
-        user.signUp().then(function(user) {
+    if (username.trim() === '' || email.trim() === '' || password.trim() === '') {
+      alert('Registration failed. Please fill in all fields.');
+    } else {
+      try {
+        // Check if the username already exists
+        var existingUser = await checkExistingUsername(username);
+        if (existingUser) {
+          alert('Registration failed. Username already exists.');
+        } else {
+          var user = new Parse.User();
+          user.set("username", username);
+          user.set("email", email);
+          user.set("password", password);
+
+          await user.signUp();
           alert('Registration successful!');
           console.log('User created successfully with username: ' + user.get("username") + ', email: ' + user.get("email") + ', and password');
           window.location.href = "index.html";
-        }).catch(function(error) {
-          alert('Registration failed. Please try again.');
-          console.log('Error: ' + error.message);
-        });
+        }
+      } catch (error) {
+        alert('Registration failed. Please try again.');
+        console.log('Error: ' + error.message);
       }
     }
+  }
 
-    function logIn() {
-      var username = document.getElementById("username1").value;
-      var password = document.getElementById("password1").value;
+  function logIn() {
+    var username = document.getElementById("username1").value;
+    var password = document.getElementById("password1").value;
 
-      if (username.trim() === '' || password.trim() === '') {
-        alert('Sign in failed. Please enter your username and password.');
-      } else {
-        Parse.User.logIn(username, password).then(function(user) {
-          console.log('User signed in successfully: ' + user.get("username"));
-          alert('Sign in successful!');
-          window.location.href = "index.html";
-        }).catch(function(error) {
-          alert('Sign in failed. Please check your username and password.');
-          console.log('Error: ' + error.message);
-        });
-      }
+    if (username.trim() === '' || password.trim() === '') {
+      alert('Sign in failed. Please enter your username and password.');
+    } else {
+      Parse.User.logIn(username, password).then(function(user) {
+        console.log('User signed in successfully: ' + user.get("username"));
+        alert('Sign in successful!');
+        
+        window.location.replace("index.html");
+        
+      }).catch(function(error) {
+        alert('Sign in failed. Please check your username and password.');
+        console.log('Error: ' + error.message);
+      });
     }
+  }
+  
   </script>
 </body>
 </html>

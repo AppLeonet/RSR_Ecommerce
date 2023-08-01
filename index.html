@@ -69,8 +69,9 @@
               <button class="dropbtn" id="welcomeMessage">Hello, </button> </a>
               <div class="dropdown-content">
               <a href="profilePage.html">Profile</a>
-              <a href="#">Link 2</a>
-              <a href="#">Link 3</a>
+              <a href="myArtwork.html">My artwork</a>
+              <a href="#" onclick="logout()">Logout</a>
+              <!--a href="#">Link 3-->
               </div>
             </div>
           </ul>
@@ -168,12 +169,23 @@
       document.getElementById("email").textContent = currentUser.get("email");
     } else {
       console.log('User is not authenticated');
-      window.location.href = "profileRegistrationForm.html";
+      //window.location.href = "profileRegistrationForm.html";
     }
   }
 
   // Call the checkAuthentication function after the page has finished loading
   document.addEventListener('DOMContentLoaded', checkAuthentication);
+
+  // Function to log out the user
+  function logout() {
+    Parse.User.logOut().then(() => {
+      console.log('User logged out successfully');
+      // Redirect to the login page or any other desired page after logout
+      window.location.href = "index.html";
+    }).catch((error) => {
+      console.log('Error while logging out: ' + error.message);
+    });
+  }
 </script>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="js/jquery-3.4.1.min.js"></script>

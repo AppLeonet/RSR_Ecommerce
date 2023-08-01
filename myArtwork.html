@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Head content -->
+  <style>
+    /* CSS style for the container of uploaded artworks */
+    #artworksContainer {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    /* CSS style for each artwork item */
+    .artwork-item {
+      flex: 0 0 250px; /* Fix the width of each item to 250px */
+      margin: 10px; /* Add margin to separate artworks */
+    }
+
+    /* CSS style for the artwork images */
+    .artwork-item img {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- HTML body content -->
+  <!-- Add this element where you want to display the username -->
+  <h2 id="artworkMessage"></h2>
+
+  <!-- Form for image, description, and price upload -->
+  <form id="uploadForm">
+    <input type="file" id="artworkImage" accept="image/*">
+    <textarea id="artworkDescription" placeholder="Artwork Description"></textarea>
+    <input type="number" id="artworkPrice" placeholder="Artwork Price">
+    <button type="button" onclick="uploadArtwork()">Upload Artwork</button>
+  </form>
+
+  <!-- Container to display uploaded artworks -->
+  <div id="artworksContainer"></div>
+
+  <!-- Scripts and JavaScript code -->
+  <script src="https://npmcdn.com/parse/dist/parse.min.js"></script>
+  <script>
+    // Define currentUser as a global variable
+  var currentUser;
+
+    // Initialize Parse
+    Parse.initialize("vTvoKmj1THgT8KVwWnKLQ1bLiAHZbc98xZj3V3zL", "1EtflPCMxsYzwARwzwnba08TFwOjRpCc5z24kBtl");
+    Parse.serverURL = "https://parseapi.back4app.com/";
+
+    // Check if the user is authenticated and display the profile information
+    function checkAuthentication() {
+      currentUser = Parse.User.current();
+
+      if (currentUser) {
+        console.log('User is authenticated: ' + currentUser.get("username"));
+
+        // Display the welcome message
+        document.getElementById("artworkMessage").textContent = currentUser.get("username") + ' Artworks ' + '!';
+
+        // Display the email
+        //document.getElementById("email").textContent = currentUser.get("email");
+
+        // Fetch and display the uploaded artworks
+        displayArtworks(currentUser);
+      } else {
+        console.log('User is not authenticated');
+        window.location.href = "profileRegistrationForm.html";
+      }
+    }
+
+    // Call the checkAuthentication function after the page has finished loading
+    document.addEventListener('DOMContentLoaded', checkAuthentication);
+
+    // Function to handle artwork upload
+    function uploadArtwork() {
+      var currentUser = Parse.User.current();
+
+      if (currentUser) {
+        var artworkImage = document.getElementById("artworkImage").files[0];
+        var artworkDescription = document.getElementById("artworkDescription").value;
+        var artworkPrice = parseFloat(document.getElementById("artworkPrice").value);
+
+        if (!artworkImage || !artworkDescription || isNaN(artworkPrice)) {
+          alert("Please fill in all fields.");
+          return;
+        }
+
+        var Artwork = Parse.Object.extend("Artwork");
+        var artwork = new Artwork();
+
+        artwork.set("user", currentUser);
+        artwork.set("description", artworkDescription);
+        artwork.set("price", artworkPrice);
+
+        var artworkImageFile = new Parse.File("artworkImage.jpg", artworkImage);
+        artwork.set("image", artworkImageFile);
+
+        artwork.save().then(function(savedArtwork) {
+          console.log("Artwork uploaded successfully!");
+          // Clear the form fields after successful upload
+          document.getElementById("artworkImage").value = "";
+          document.getElementById("artworkDescription").value = "";
+          document.getElementById("artworkPrice").value = "";
+
+          // Refresh the displayed artworks to include the newly uploaded artwork
+          displayArtworks(currentUser);
+        }).catch(function(error) {
+          console.log("Error uploading artwork: " + error.message);
+          alert("Error uploading artwork. Please try again.");
+        });
+      } else {
+        console.log('User is not authenticated');
+        window.location.href = "profileRegistrationForm.html";
+      }
+    }
+
+    // Function to fetch and display the uploaded artworks
+    function displayArtworks(currentUser) {
+      // Create a new Parse query for the "Artwork" class
+      var Artwork = Parse.Object.extend("Artwork");
+      var query = new Parse.Query(Artwork);
+
+      // Include only artworks created by the current user
+      query.equalTo("user", currentUser);
+
+      // Fetch the artworks
+      query.find().then(function(results) {
+        var artworksContainer = document.getElementById("artworksContainer");
+        artworksContainer.innerHTML = ""; // Clear the container before adding new artworks
+
+        // Loop through the fetched artworks and create HTML elements to display them
+        results.forEach(function(artwork) {
+          var imageUrl = artwork.get("image").url();
+          var description = artwork.get("description");
+          var price = artwork.get("price");
+
+          // Create elements for each artwork
+          var artworkElement = document.createElement("div");
+          artworkElement.className = "artwork-item";
+
+          var imageElement = document.createElement("img");
+          imageElement.src = imageUrl;
+          imageElement.alt = "Artwork Image";
+          imageElement.style.width = "100%"; // Set image width to 100%
+          var descriptionElement = document.createElement("p");
+          descriptionElement.textContent = "Description: " + description;
+
+          var priceElement = document.createElement("p");
+          priceElement.textContent = "Price: $" + price;
+
+          // Create edit button
+          var editButton = document.createElement("button");
+          editButton.textContent = "Edit";
+          editButton.onclick = function() {
+            editArtwork(artwork);
+          };
+
+          // Create delete button
+          var deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.onclick = function() {
+            deleteArtwork(artwork, currentUser);
+          };
+
+          // Append the elements to the container
+          artworkElement.appendChild(imageElement);
+          artworkElement.appendChild(descriptionElement);
+          artworkElement.appendChild(priceElement);
+          artworkElement.appendChild(editButton);
+          artworkElement.appendChild(deleteButton);
+
+          artworksContainer.appendChild(artworkElement);
+        });
+      }).catch(function(error) {
+        console.log('Error fetching artworks: ' + error.message);
+      });
+    }
+
+    // Function to handle artwork edit
+    function editArtwork(artwork) {
+      var newDescription = prompt("Enter the new description:", artwork.get("description"));
+      var newPrice = parseFloat(prompt("Enter the new price:", artwork.get("price")));
+      if (newDescription && !isNaN(newPrice)) {
+        artwork.set("description", newDescription);
+        artwork.set("price", newPrice);
+
+        artwork.save().then(function(updatedArtwork) {
+          console.log("Artwork updated successfully!");
+          // Refresh the displayed artworks to show the updated information
+          displayArtworks(currentUser);
+        }).catch(function(error) {
+          console.log("Error updating artwork: " + error.message);
+          alert("Error updating artwork. Please try again.");
+        });
+      } else {
+        console.log("Invalid input for edit.");
+      }
+    }
+
+    // Function to handle artwork deletion
+    function deleteArtwork(artwork, currentUser) {
+      var confirmDelete = confirm("Are you sure you want to delete this artwork?");
+      if (confirmDelete) {
+        artwork.destroy().then(function(deletedArtwork) {
+          console.log("Artwork deleted successfully!");
+          // Refresh the displayed artworks to remove the deleted artwork
+          displayArtworks(currentUser);
+        }).catch(function(error) {
+          console.log("Error deleting artwork: " + error.message);
+          alert("Error deleting artwork. Please try again.");
+        });
+      }
+    }
+  </script>
+</body>
+</html>
